@@ -19,12 +19,15 @@ function activate(context) {
 			placeHolder: 'Enter the url of the file to be translated',
 			prompt: 'Enter the url of the file to be translated'
 		}).then(function (url) {
+			console.log(url);
 			if (url) {
-				//lonsole log the url
-				vscode.workspace.getConfiguration().update('fura.url', url, true);
-				console.log(url);
+				vscode.workspace.getConfiguration().update('fura.apiKey', url, true);
+				// console.log(vscode.workspace.getConfiguration().get('fura.url'));
+				
+				
 			}
 		});
+		//save url to environment variable
 		
 
 		// setInterval(() => {
@@ -37,12 +40,10 @@ function activate(context) {
 	});
 
 	let disposable2 = vscode.commands.registerCommand('fura.getUrl', function () {
-		let url = vscode.workspace.getConfiguration().get('fura.url');
+		let url = vscode.workspace.getConfiguration().get('fura.apiKey');
 		console.log(url);
 		vscode.window.showInformationMessage(url);
 	});
-
-// how to use button in the extension
 
 
 	context.subscriptions.push(disposable);
