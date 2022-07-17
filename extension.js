@@ -41,8 +41,11 @@ function activate(context) {
 
 	let disposable2 = vscode.commands.registerCommand('fura.getUrl', function () {
 		let url = vscode.workspace.getConfiguration().get('fura.apiKey');
+		// @ts-ignore
+		axios.get(`http://task.me/api/vscode/${url}`).then(res => {
+		vscode.window.showInformationMessage(res.data);
+		}).catch(err => {console.log(err);})
 		console.log(url);
-		vscode.window.showInformationMessage(url);
 	});
 
 
