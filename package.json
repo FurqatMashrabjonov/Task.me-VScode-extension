@@ -1,8 +1,9 @@
 {
-  "name": "fura",
-  "displayName": "fura",
-  "description": "aaaaaaaaaa",
-  "version": "0.0.4",
+  "name": "Taskme",
+  "displayName": "Taskme",
+  "description": "taskme.uz sayti uchun maxsus tayyorlangan.",
+  "version": "0.1.4",
+  "icon": "images/icon.png",
   "publisher": "FurqatMashrabjonov2",
   "engines": {
     "vscode": "^1.69.0"
@@ -11,27 +12,33 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:fura.helloWorld"
+    "onCommand:Taskme.tokenni_kiritish",
+    "onCommand:Taskme.boshlash",
+    "onCommand:Taskme.tugatish"
   ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "fura.helloWorld",
-        "title": "Hello World"
+        "command": "Taskme.tokenni_kiritish",
+        "title": "Tokenni kiritish yoki yangilash"
       },
       {
-        "command": "fura.getUrl",
-        "title": "Get Url"
+        "command": "Taskme.boshlash",
+        "title": "Vaqtni boshlash"
+      },
+      {
+        "command": "Taskme.tugatish",
+        "title": "Vaqtni to'xtatish"
       }
     ],
     "configuration": {
-      "title": "Fura Configuration",
+      "title": "Task.me Sozlamalari",
       "properties": {
-        "fura.apiKey": {
+        "Taskme.token": {
           "type": "string",
           "default": "",
-          "description": "Fura API Key"
+          "description": "Taskme Token"
         }
       }
     }

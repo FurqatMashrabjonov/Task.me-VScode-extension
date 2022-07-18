@@ -1,34 +1,49 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 const axios = require('axios');
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+
+let time_interval = null
+
+function startTime(){
+	time_interval = setInterval(() => {
+		let editor = vscode.window.activeTextEditor;
+		let token = vscode.workspace.getConfiguration().get('Taskme.token');
+		let data = {
+			languageId: editor.document.languageId,
+			// text: editor.document.getText(),
+			project: vscode.workspace.name,
+			file: editor.document.fileName,
+			line: editor.selection.active.line,
+			column: editor.selection.active.character,
+			time: new Date().getTime()
+		}
+			
+		// @ts-ignore
+		axios.post(`http://task.me/api/vscode/${token}`, data).then(res => {
+			console.log(res.data);
+		}).catch(err => {console.log(err);})
+	}, 1000 * 60)
+
+
+
+}
+
 
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
 
-	console.log('Congratulations, your extension "fura" is now active!');
-
-
-	let disposable = vscode.commands.registerCommand('fura.helloWorld', function () {
+	let get_or_update_token = vscode.commands.registerCommand('Taskme.tokenni_kiritish', function () {
 		//open prompt to get the url
 		vscode.window.showInputBox({
-			placeHolder: 'Enter the url of the file to be translated',
-			prompt: 'Enter the url of the file to be translated'
-		}).then(function (url) {
-			console.log(url);
-			if (url) {
-				vscode.workspace.getConfiguration().update('fura.apiKey', url, true);
-				// console.log(vscode.workspace.getConfiguration().get('fura.url'));
-				
+			placeHolder: 'taskme.uz dan olgan tokeningizni kiriting',
+			prompt: 'Tokenni kiriting'
+		}).then(function (token) {
+			if (token) {
+				vscode.workspace.getConfiguration().update('Taskme.token', token, true);
 				
 			}
 		});
-		//save url to environment variable
-		
 
 		// setInterval(() => {
 		// 	// @ts-ignore
@@ -36,22 +51,31 @@ function activate(context) {
 		// 	console.log(res.data);
 		// });
 		// }, 1000)
-		vscode.window.showInformationMessage('Hello World from furaaaaaaaaaaaaaaaa!');
+		vscode.window.showInformationMessage('Token muvaffaqiyatli saqlandi.');
 	});
 
-	let disposable2 = vscode.commands.registerCommand('fura.getUrl', function () {
-		let url = vscode.workspace.getConfiguration().get('fura.apiKey');
-		// @ts-ignore
-		axios.get(`http://task.me/api/vscode/${url}`).then(res => {
-		vscode.window.showInformationMessage(res.data);
-		}).catch(err => {console.log(err);})
-		console.log(url);
+	let start_time = vscode.commands.registerCommand('Taskme.boshlash', function () {
+		// let url = vscode.workspace.getConfiguration().get('fura.apiKey');
+		// // @ts-ignore
+		// axios.get(`http://task.me/api/vscode/${url}`).then(res => {
+		// vscode.window.showInformationMessage(res.data);
+		// }).catch(err => {console.log(err);})
+		// console.log(url);
+		
+		startTime()
+		
+
+	});
+
+	let stop_time = vscode.commands.registerCommand('Taskme.tugatish', function () {	
+		clearInterval(time_interval)
 	});
 
 
-	context.subscriptions.push(disposable);
 
-	context.subscriptions.push(disposable2);
+	context.subscriptions.push(get_or_update_token);
+	context.subscriptions.push(start_time);
+	context.subscriptions.push(stop_time);
 }
 
 // this method is called when your extension is deactivated
