@@ -21,7 +21,7 @@ function startTime(){
 		axios.post(`http://task.me/api/vscode/${token}`, data).then(res => {
 			console.log(res.data);
 		}).catch(err => {console.log(err);})
-	}, 1000 * 60)
+	}, 1000 * 60)   
 
 
 
